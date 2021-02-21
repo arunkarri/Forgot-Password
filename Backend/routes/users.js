@@ -19,7 +19,7 @@ router.post('/create-user', function (req, res, next) {
 
   client.connect(async (err) => {
     const db = await client.db(dbName);
-    const record = await db.collection(collectionName).findOne({ email: req.body.mail });
+    const record = await db.collection(collectionName).findOne({ email: req.body.email });
     if (!!record) {
       res.json({ message: 'User already exists.', statusCode: 500 });
     } else {

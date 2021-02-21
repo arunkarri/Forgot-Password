@@ -72,7 +72,8 @@ const ForgotPassword = () => {
           {addLoad === true ? (
             <LoadingButton />
           ) : (
-            <button type="button" className="btn btn-primary" onClick={addUser}>
+            <button type="button" className="btn btn-primary" onClick={addUser} 
+            disabled={newEmail === '' || password === ''}>
               Add
             </button>
           )}
@@ -87,7 +88,8 @@ const ForgotPassword = () => {
           {submitLoad === true ? (
             <LoadingButton />
           ) : (
-            <button type="button" className="btn btn-primary" onClick={forgotPassword}>
+            <button type="button" className="btn btn-primary" onClick={forgotPassword}
+            disabled={email === ''}>
               Submit
             </button>
           )}
