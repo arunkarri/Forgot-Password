@@ -1,3 +1,3 @@
-const frontEndUrl = 'http://localhost:3001/';
+const frontEndUrl = 'https://forgot-password.netlify.app/';
 
 module.exports = frontEndUrl;
