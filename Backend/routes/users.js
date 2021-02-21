@@ -19,9 +19,14 @@ router.post('/create-user', function (req, res, next) {
 
   client.connect(async (err) => {
     const db = await client.db(dbName);
-    const result = await db.collection(collectionName).insertOne({ email: req.body.email, password: req.body.password });
-    console.log(`result: ${result}`);
-    res.json({ message: 'User Created.', statusCode: 200 });
+    const record = await db.collection(collectionName).findOne({ email: req.body.mail });
+    if (!!record) {
+      res.json({ message: 'User already exists.', statusCode: 500 });
+    } else {
+      const result = await db.collection(collectionName).insertOne({ email: req.body.email, password: req.body.password });
+      console.log(`result: ${result}`);
+      res.json({ message: 'User Created.', statusCode: 200 });
+    }
     client.close();
   });
 });
@@ -70,12 +75,12 @@ router.get('/reset/:email/:id', function (req, res, next) {
   });
 });
 
-router.post('/reset', function (req, res, next) {
+router.put('/reset', function (req, res, next) {
   const client = new mongo.client(mongo.url, { useNewUrlParser: true, useUnifiedTopology: true });
 
   client.connect(async (err) => {
     const db = await client.db(dbName);
-    const result = await db.collection(collectionName).updateOne({ email: req.body.email }, {$set: { password: req.body.password }});
+    const result = await db.collection(collectionName).updateOne({ email: req.body.email }, { $set: { password: req.body.password } });
     if (!!result) {
       await db.collection(collectionName).updateOne({ email: req.body.email }, { $unset: { random_string: 1 } });
       res.json({ message: 'New password is set successfully', statusCode: 200 });

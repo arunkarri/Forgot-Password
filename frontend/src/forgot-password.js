@@ -8,8 +8,9 @@ const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [newEmail, setNewEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [addLoad, setAddLoad] = useState(false);
   const [submitLoad, setsubmitLoad] = useState(false);
-  
+
   let type = 'success';
 
   async function forgotPassword() {
@@ -30,11 +31,12 @@ const ForgotPassword = () => {
     alert.show(res.message, {
       type: type,
     });
+    setEmail('');
   }
 
   async function addUser() {
-    setsubmitLoad(true);
-    const data = { newEmail: email ,password };
+    setAddLoad(true);
+    const data = { email: newEmail, password };
     const req = await fetch(`${env}users/create-user`, {
       method: 'POST',
       headers: {
@@ -43,38 +45,38 @@ const ForgotPassword = () => {
       body: JSON.stringify(data),
     });
     const res = await req.json();
-    setsubmitLoad(false);
+    setAddLoad(false);
     if (res.statusCode != 200) {
       type = 'error';
     }
     alert.show(res.message, {
       type: type,
     });
+    setNewEmail('');
+    setPassword('');
   }
 
   return (
     <>
       <form className="forgot-form">
-
-      <h4 className="text-danger">Add New user</h4>
+        <h4 className="text-danger">Add New user</h4>
         <div className="form-group">
           <label htmlFor="newEmail">Enter Email address</label>
           <input type="email" className="form-control" id="newEmail" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} placeholder="name@example.com" />
         </div>
         <div className="form-group">
           <label htmlFor="password">Enter Password</label>
-          <input type="password" className="form-control" id="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="name@example.com" />
+          <input type="password" className="form-control" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </div>
         <div className="form-group">
-          {submitLoad === true ? (
+          {addLoad === true ? (
             <LoadingButton />
           ) : (
             <button type="button" className="btn btn-primary" onClick={addUser}>
               Add
             </button>
           )}
-      </div>
-
+        </div>
 
         <h4 className="text-danger">Forgot Password</h4>
         <div className="form-group">

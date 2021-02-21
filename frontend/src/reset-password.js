@@ -16,7 +16,7 @@ const ResetPassword = () => {
     const data = { password, email };
     let type = 'success';
     const req = await fetch(`${env}users/reset`, {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
